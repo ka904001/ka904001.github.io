@@ -8,13 +8,14 @@
     <title>Circles!</title>
 </head>
 
-<body>
+<body style="margin: 0;">
     <canvas id="draw_area"></canvas>
     <script>
         const canvas = document.querySelector("canvas");
-        const ctx = canvas.getContext("2d");
-        const width = canvas.width = window.innerWidth;
-        const height = canvas.height = window.innerHeight;
+        canvas.style.display = "block";
+        let ctx = canvas.getContext("2d");
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
         function random(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         };
@@ -122,39 +123,46 @@
         };
         class Field {
             static balls = [];
-            constructor(num = 25) {
+            static num;
+            static repopulate() {
                 Field.balls = [];
-                for (let i = 0; i < num; i++) {
+                for (let i = 0; i < Field.num; i++) {
                     Field.balls.push(Ball.createRandom(width, height));
                 }
             };
-        };
-        const field = new Field();
-        function loop() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-            ctx.fillRect(0, 0, width, height);
-            for (const i of Field.balls) {
-                i.draw();
-                i.update();
-                // i.direction.x = 0;
-                // i.direction.y = 0;
-            }
-            for (let i = 0; i < Field.balls.length; i++) {
-                const A = Field.balls[i];
-                for (let j = i + 1; j < Field.balls.length; j++) {
-                    const B = Field.balls[j];
-                    let distance = Math.abs(A.coordinate.distance(B.coordinate));
-                    let force = A.size * B.size / distance ** 2;
-                    // add to A
-                    A.direction.x += -100 * (B.coordinate.x - A.coordinate.x) / distance * force / A.size ** 2;
-                    A.direction.y += -100 * (B.coordinate.y - A.coordinate.y) / distance * force / A.size ** 2;
-                    B.direction.x += -100 * (A.coordinate.x - B.coordinate.x) / distance * force / B.size ** 2;
-                    B.direction.y += -100 * (A.coordinate.y - B.coordinate.y) / distance * force / B.size ** 2;
+            static loop() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.fillRect(0, 0, width, height);
+                for (let i = 0; i < Field.balls.length; i++) {
+                    const A = Field.balls[i];
+                    A.draw();
+                    A.update();
+                    for (let j = i + 1; j < Field.balls.length; j++) {
+                        const B = Field.balls[j];
+                        let distance = Math.abs(A.coordinate.distance(B.coordinate));
+                        let force = A.size * B.size / distance ** 2;
+                        // add to A
+                        A.direction.x += -100 * (B.coordinate.x - A.coordinate.x) / distance * force / A.size ** 2;
+                        A.direction.y += -100 * (B.coordinate.y - A.coordinate.y) / distance * force / A.size ** 2;
+                        B.direction.x += -100 * (A.coordinate.x - B.coordinate.x) / distance * force / B.size ** 2;
+                        B.direction.y += -100 * (A.coordinate.y - B.coordinate.y) / distance * force / B.size ** 2;
+                    }
                 }
-            }
-            requestAnimationFrame(loop);
+                requestAnimationFrame(Field.loop);
+            };
+            static initialize(num = 25) {
+                Field.num = num;
+                Field.repopulate();
+                window.addEventListener("resize", () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                    Field.repopulate();
+                });
+                return this;
+            };
+            static initialized = Field.initialize();
         };
-        loop();
+        Field.loop();
     </script>
 </body>
 
