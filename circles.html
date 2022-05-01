@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circles!</title>
+</head>
+
+<body>
+    <canvas id="draw_area"></canvas>
+    <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width = window.innerWidth;
+        const height = canvas.height = window.innerHeight;
+        function random(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        };
+        function randomRGB() {
+            return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+        }
+        class Vector {
+            x;
+            y;
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            };
+            length() {
+                return (this.x ** 2 + this.y ** 2) ** (0.5);
+            };
+            distance(vector) {
+                return ((this.x - vector.x) ** 2 + (this.y - vector.y) ** 2) ** (0.5);
+            };
+            distance2(vector) {
+                return (this.x - vector.x) ** 2 + (this.y - vector.y) ** 2;
+            };
+            add(coordinate) {
+                this.x += coordinate.x;
+                this.y += coordinate.y;
+                return this;
+            };
+            scale(factor) {
+                this.x *= factor;
+                this.y *= factor;
+                return this;
+            };
+            // returns length and formats to unit length
+            normalize() {
+                let length = this.length();
+                this.scale(1 / length);
+                return length;
+            };
+        };
+        class Ball {
+            coordinate;
+            direction;
+            color;
+            size;
+            constructor(coordinate, direction, color, size) {
+                this.coordinate = coordinate;
+                this.direction = direction;
+                this.color = color;
+                this.size = size;
+            };
+            static createRandom(width, height) {
+                let size = random(10, 30);
+                return new Ball(
+                    new Vector(
+                        random(size, width - size),
+                        random(size, height - size)),
+                    new Vector(
+                        Math.random(),
+                        Math.random()
+                    ),
+                    randomRGB(),
+                    size
+                );
+            };
+            update() {
+                this.coordinate.add(this.direction);
+                // reflection off of top/bottom
+                if (this.coordinate.x - this.size < 0.0 || this.coordinate.x + this.size > width) {
+                    // drop the coordinate?
+                    this.direction.x = -this.direction.x;
+                }
+                if (this.coordinate.y - this.size < 0.0 || this.coordinate.y + this.size > height) {
+                    this.direction.y = -this.direction.y;
+                }
+                return this;
+            };
+            collides(ball) {
+                return this.coordinate.distance2(ball.coordinate) < (this.size + ball.size) ** 2;
+            };
+            collide(ball) {
+                // collide on x;
+                let m = Math.PI * ball.size ** 2;
+                let M = Math.PI * this.size ** 2;
+                let thisVelocity = this.direction;
+                let ballVelocity = ball.direction;
+                let thisDirection = new Vector(
+                    ((2 * ballVelocity.x - thisVelocity.x) * m + M * thisVelocity.x) / (m + M),
+                    ((2 * ballVelocity.y - thisVelocity.y) * m + M * thisVelocity.y) / (m + M)
+                );
+                let ballDirection = new Vector(
+                    ((2 * thisVelocity.x - ballVelocity.x) * M + m * ballVelocity.x) / (m + M),
+                    ((2 * thisVelocity.y - ballVelocity.y) * M + m * ballVelocity.y) / (m + M)
+                );
+                this.direction = thisDirection;
+                ball.direction = ballDirection;
+                return this;
+            };
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.coordinate.x, this.coordinate.y, this.size, 0, 2 * Math.PI);
+                ctx.fill();
+                return this;
+            };
+        };
+        class Field {
+            static balls = [];
+            constructor(num = 25) {
+                Field.balls = [];
+                for (let i = 0; i < num; i++) {
+                    Field.balls.push(Ball.createRandom(width, height));
+                }
+            };
+        };
+        const field = new Field();
+        function loop() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.fillRect(0, 0, width, height);
+            for (const i of Field.balls) {
+                i.draw();
+                i.update();
+                // i.direction.x = 0;
+                // i.direction.y = 0;
+            }
+            for (let i = 0; i < Field.balls.length; i++) {
+                const A = Field.balls[i];
+                for (let j = i + 1; j < Field.balls.length; j++) {
+                    const B = Field.balls[j];
+                    let distance = Math.abs(A.coordinate.distance(B.coordinate));
+                    let force = A.size * B.size / distance ** 2;
+                    // add to A
+                    A.direction.x += -100 * (B.coordinate.x - A.coordinate.x) / distance * force / A.size ** 2;
+                    A.direction.y += -100 * (B.coordinate.y - A.coordinate.y) / distance * force / A.size ** 2;
+                    B.direction.x += -100 * (A.coordinate.x - B.coordinate.x) / distance * force / B.size ** 2;
+                    B.direction.y += -100 * (A.coordinate.y - B.coordinate.y) / distance * force / B.size ** 2;
+                }
+            }
+            requestAnimationFrame(loop);
+        };
+        loop();
+    </script>
+</body>
+
+</html>
