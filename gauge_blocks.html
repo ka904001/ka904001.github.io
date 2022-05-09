@@ -8,8 +8,7 @@
     <title>Gauge block calculator</title>
     <style>
         section {
-            align-content: center;
-            display: flex;
+            margin: auto;
         }
 
         p {
@@ -18,12 +17,14 @@
         }
 
         input {
-            flex: auto;
+            display: block;
+            margin: auto;
         }
 
         .dial {
-            display: flex;
-            width: 40%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .dial.hidden {
@@ -31,13 +32,21 @@
         }
 
         #jog_dial_one {
+            display: block;
+            margin: auto;
             aspect-ratio: 1 / 1;
-            width: 100%;
+            width: 40%;
         }
 
         #jog_dial_two {
+            display: block;
+            margin: auto;
             aspect-ratio: 1 / 1;
-            width: 100%;
+            width: 40%;
+        }
+
+        #dial_container {
+            margin: 0px;
         }
     </style>
 </head>
