@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauge block calculator</title>
+    <style>
+        section {
+            align-content: center;
+            display: flex;
+        }
+
+        p {
+            text-align: center;
+            flex: auto;
+        }
+
+        input {
+            flex: auto;
+        }
+
+        .dial {
+            display: flex;
+            width: 40%;
+        }
+
+        .dial.hidden {
+            display: none;
+        }
+
+        #jog_dial_one {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+        }
+
+        #jog_dial_two {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <section>
+            <input type="number" name="" step="0.0001" id="inputNumber">
+        </section>
+        <section>
+            <div class="dial">
+                <div id="jog_dial_one"></div>
+            </div>
+            <div class="dial">
+                <div id="jog_dial_two"></div>
+            </div>
+        </section>
+        <p style="text-align: center; flex: auto;">Solution:</p>
+        <p id="outputField"></p>
+    </div>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="./rangeslider.min.js"></script> -->
+    <script src="./jogDial.js"></script>
+    <script>
+        let inp = document.getElementById("inputNumber");
+        let out = document.getElementById("outputField");
+
+        function floatSafeRemainder(val, step) {
+            var valDecCount = (val.toString().split('.')[1] || '').length;
+            var stepDecCount = (step.toString().split('.')[1] || '').length;
+            var decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
+            var valInt = parseInt(val.toFixed(decCount).replace('.', ''));
+            var stepInt = parseInt(step.toFixed(decCount).replace('.', ''));
+            return (valInt % stepInt) / Math.pow(10, decCount);
+        }
+
+        function printPath() {
+            out.textContent = "";
+            let num = Number(inp.value);
+            num = Math.round(num * 10000);
+            if (num < 0 || num >= data.backward.length || data.backward[num] <= 0) {
+                out.textContent = "no solution";
+                return;
+            }
+            let val = 0.0;
+            let backward = [];
+            val = 0.0;
+            for (let cur = num; data.backward[cur] >= 0 && cur > 0; cur -= Math.round(val * 10000.0)) {
+                val = data.values[data.backward[cur]];
+                backward.push(val);
+            }
+            backward.forEach(element => {
+                out.textContent += element + ' ';
+            });
+        };
+        let rot1 = 0;
+        let rot2 = 0;
+        function updateInput() {
+            inp.value = (rot1 + rot2).toFixed(4);
+            printPath();
+        }
+        let dialOne = JogDial(document.getElementById('jog_dial_one'),
+            { debug: true, wheelSize: '90%', knobSize: '30%', degreeStartAt: 0 }).on('mousemove', function (evt) {
+                rot1 = evt.target.rotation / 360.0;
+                updateInput();
+            });
+        let dialTwo = JogDial(document.getElementById('jog_dial_two'),
+            { debug: true, wheelSize: '90%', knobSize: '30%', degreeStartAt: 0 }).on('mousemove', function (evt) {
+                rot2 = evt.target.rotation / 360.0 * 0.02;
+                updateInput();
+            });
+        inp.addEventListener('change', () => {
+            let val = Number(inp.value);
+            dialOne.trigger('angle', (val - rot2) * 360.0);
+            printPath();
+        });
+    </script>
+    <script src="./output.js"></script>
+</body>
+
+</html>
