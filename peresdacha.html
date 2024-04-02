@@ -14,130 +14,128 @@
 
 <body>
     <div class="container">
-        <div class="card" id="start_form">
-            <div class="card-body">
-                Введите предметы, которые будут сдаваться черз запятую
+        <div class="card">
+            <div class="card" id="start_form">
+                <div class="card-body">
+                    Введите предметы, которые будут сдаваться черз запятую
+                </div>
+                <div class="mb-3">
+                    <label for="subjects" class="form-label">Предметы</label>
+                    <input type="text" class="form-control" id="subjects">
+                </div>
+                <button type="submit" id="start_form_submit" class="btn btn-primary">Добавить</button>
+                <!-- <form>
+                </form> -->
             </div>
-            <div class="mb-3">
-                <label for="subjects" class="form-label">Предметы</label>
-                <input type="text" class="form-control" id="subjects">
-            </div>
-            <button type="submit" id="start_form_submit" class="btn btn-primary">Добавить</button>
-            <!-- <form>
-            </form> -->
-        </div>
-        <div class="card" id="main_form">
-            <div class="card-body">
-                Добавить
-            </div>
-            <div class="mb-3">
-                <select class="form-select" aria-label="Default select example" id="subject">
-                    <!-- <option selected>Open this select menu</option> -->
-                    <!-- <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option> -->
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="test_num" class="form-label">№ билета</label>
-                <input type="number" class="form-control" id="test_num">
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">ФИО</label>
-                <input type="text" class="form-control" id="name">
-            </div>
-            <div class="mb-3">
-                <label for="group" class="form-label">Группа</label>
-                <input type="text" class="form-control" id="group">
-            </div>
-            <button id="main_form_submit" type="submit" class="btn btn-primary">Добавить</button>
-            <button id="main_form_cancel" type="submit" class="btn btn-danger">Отменить</button>
-        </div>
-        <div class="card" id="grade_form">
-            <div class="card-body">
-                Оценить
-                <div class="mb-3" style="display: none;">
-                    <input type="number" class="form-control" id="grading_identifier" disabled>
+            <div class="card" id="main_form">
+                <div class="card-body">
+                    Добавить
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" aria-label="Default select example" id="subject">
+                        <!-- <option selected>Open this select menu</option> -->
+                        <!-- <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option> -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="test_num" class="form-label">№ билета</label>
+                    <input type="number" class="form-control" id="test_num">
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">ФИО</label>
-                    <input type="text" class="form-control" id="grading_name" disabled>
+                    <input type="text" class="form-control" id="name">
                 </div>
                 <div class="mb-3">
                     <label for="group" class="form-label">Группа</label>
-                    <input type="text" class="form-control" id="grading_group" disabled>
+                    <input type="text" class="form-control" id="group" oninput="this.value = this.value.toUpperCase()">
                 </div>
+                <button id="main_form_submit" type="submit" class="btn btn-primary">Добавить</button>
+                <button id="main_form_cancel" type="submit" class="btn btn-danger">Отменить</button>
             </div>
-            <div class="mb-3">
-                <select class="form-select" aria-label="Default select example" id="grade">
-                    <!-- <option selected>Open this select menu</option> -->
-                    <option value="неудовлетворено">неудовлетворено</option>
-                    <option value="зачтено">зачтено</option>
-                    <option value="удовлетворено">удовлетворено</option>
-                    <option value="хорошо">хорошо</option>
-                    <option value="отлично">отлично</option>
-                    <option value="непонятка">непонятка</option>
-                </select>
+            <div class="card" id="grade_form">
+                <div class="card-body">
+                    Оценить
+                    <div class="mb-3" style="display: none;">
+                        <input type="number" class="form-control" id="grading_identifier" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">ФИО</label>
+                        <input type="text" class="form-control" id="grading_name" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="group" class="form-label">Группа</label>
+                        <input type="text" class="form-control" id="grading_group" disabled>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" aria-label="Default select example" id="grade">
+                        <!-- <option selected>Open this select menu</option> -->
+                        <option value="неудовлетворено">неудовлетворено</option>
+                        <option value="зачтено">зачтено</option>
+                        <option value="удовлетворено">удовлетворено</option>
+                        <option value="хорошо">хорошо</option>
+                        <option value="отлично">отлично</option>
+                        <option value="непонятка">непонятка</option>
+                    </select>
+                </div>
+                <button id="grade_form_submit" type="submit" class="btn btn-primary">Оценить</button>
+                <button id="grade_form_cancel" type="submit" class="btn btn-danger">Отмена</button>
             </div>
-            <button id="grade_form_submit" type="submit" class="btn btn-primary">Оценить</button>
-            <button id="grade_form_cancel" type="submit" class="btn btn-danger">Отмена</button>
-        </div>
-        <div class="card" id="passing">
-            <div class="card-body">
-                Сдающие
+            <div class="table-responsive" id="passing">
+                <div class="card-body">
+                    Сдающие
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Предмет</th>
+                            <th scope="col">№ билета</th>
+                            <th scope="col">ФИО</th>
+                            <th scope="col">Группа</th>
+                            <th scope="col">Время</th>
+                            <th scope="col">Оценить</th>
+                        </tr>
+                    </thead>
+                    <tbody id="passing_body">
+                    </tbody>
+                </table>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Предмет</th>
-                        <th scope="col">№ билета</th>
-                        <th scope="col">ФИО</th>
-                        <th scope="col">Группа</th>
-                        <th scope="col">Время</th>
-                        <th scope="col">Оценить</th>
-                    </tr>
-                </thead>
-                <tbody id="passing_body">
-                </tbody>
-            </table>
-        </div>
-        <div class="card" id="passed">
-            <div class="card-body">
-                Сдавшие
+            <div class="table-responsive" id="passed">
+                <div class="card-body">
+                    Сдавшие
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Предмет</th>
+                            <th scope="col">№ билета</th>
+                            <th scope="col">ФИО</th>
+                            <th scope="col">Группа</th>
+                            <th scope="col">Время</th>
+                            <th scope="col">Оценка</th>
+                        </tr>
+                    </thead>
+                    <tbody id="passed_body">
+                    </tbody>
+                </table>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Предмет</th>
-                        <th scope="col">№ билета</th>
-                        <th scope="col">ФИО</th>
-                        <th scope="col">Группа</th>
-                        <th scope="col">Время</th>
-                        <th scope="col">Оценка</th>
-                    </tr>
-                </thead>
-                <tbody id="passed_body">
-                </tbody>
-            </table>
-        </div>
-        <div class="card" id="footer">
-            <div class="card-body">
-            <button id="download_csv" type="submit" class="btn btn-primary">Скачать результаты</button>
-            <!-- <button id="grade_form_cancel" type="submit" class="btn btn-danger">Отмена</button> -->
+            <div class="card" id="footer">
+                <div class="card-body">
+                <button id="download_csv" type="submit" class="btn btn-primary">Скачать результаты</button>
+                <!-- <button id="grade_form_cancel" type="submit" class="btn btn-danger">Отмена</button> -->
+            </div>
+            <div class="br-icon" id="add_button"></div>
         </div>
     </div>
 
-    <div class="br-icon" id="add_button"></div>
     <style type="text/css">
-        body {
-            background-color: #d4d2d2;
-        }
-
         .br-icon {
             position: fixed;
-            bottom: 30px;
+            /* bottom: 30px; */
             right: 30px;
             z-index: 100;
             height: 75px;
