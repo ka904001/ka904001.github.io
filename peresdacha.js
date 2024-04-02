@@ -89,7 +89,7 @@ main_form_submit.addEventListener("click", (e)=>{
     tr.id = `identifier_${identifier}`;
     for(let key in participants[identifier]){
         let th = document.createElement("th");
-        console.log(`${key}`);
+        // console.log(`${key}`);
         if(key == "start_time"){
             th.id = `identifier_${identifier}_timer`;
             // add timer logic
@@ -110,6 +110,9 @@ main_form_submit.addEventListener("click", (e)=>{
             continue;
         }
         th.innerText = participants[identifier][key];
+        if(["identifier", "test_num"].includes(key)){
+            th.style.display='none';
+        }
         tr.appendChild(th);
     }
     // create button to check them out
